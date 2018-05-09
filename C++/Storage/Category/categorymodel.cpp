@@ -112,7 +112,6 @@ QHash<int, QByteArray> CategoryModel::roleNames() const
 bool CategoryModel::readFile()
 {
 #define P_C_STR(a) reinterpret_cast< char* >(&(a)), sizeof(a)
-
     if ( m_fileName != "" ){
         std::fstream file( m_fileName.toStdString(), std::ios::in | std::ios::binary );
         if ( file.is_open() ) {

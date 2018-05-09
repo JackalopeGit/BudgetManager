@@ -72,33 +72,33 @@ void LineSeriesModel::payAdded(const Pay* pay)
     {
         switch (m_lineType)
         {
-        case ( Modes::Years ):
-        {
-            if ( pay->getSum() > 0 ){
-                m_lines[ pay->getCurrency() ]->addIncome( pay->date().year() - m_begin.year(), pay->getSum() );
-            } else {
-                m_lines[ pay->getCurrency() ]->addExpence( pay->date().year() - m_begin.year(), -pay->getSum() );
+            case ( Modes::Years ):
+            {
+                if ( pay->getSum() > 0 ){
+                    m_lines[ pay->getCurrency() ]->addIncome( pay->date().year() - m_begin.year(), pay->getSum() );
+                } else {
+                    m_lines[ pay->getCurrency() ]->addExpence( pay->date().year() - m_begin.year(), -pay->getSum() );
+                }
+                break;
             }
-            break;
-        }
-        case ( Modes::Months ):
-        {
-            if ( pay->getSum() > 0 ){
-                m_lines[ pay->getCurrency() ]->addIncome( pay->date().toMonths() - m_begin.toMonths(), pay->getSum() );
-            } else {
-                m_lines[ pay->getCurrency() ]->addExpence( pay->date().toMonths() - m_begin.toMonths(), -pay->getSum() );
+            case ( Modes::Months ):
+            {
+                if ( pay->getSum() > 0 ){
+                    m_lines[ pay->getCurrency() ]->addIncome( pay->date().toMonths() - m_begin.toMonths(), pay->getSum() );
+                } else {
+                    m_lines[ pay->getCurrency() ]->addExpence( pay->date().toMonths() - m_begin.toMonths(), -pay->getSum() );
+                }
+                break;
             }
-            break;
-        }
-        case ( Modes::Days ):
-        {
-            if ( pay->getSum() > 0 ){
-                m_lines[ pay->getCurrency() ]->addIncome( pay->date().toDays() - m_begin.toDays(), pay->getSum() );
-            } else {
-                m_lines[ pay->getCurrency() ]->addExpence( pay->date().toDays() - m_begin.toDays(), -pay->getSum() );
+            case ( Modes::Days ):
+            {
+                if ( pay->getSum() > 0 ){
+                    m_lines[ pay->getCurrency() ]->addIncome( pay->date().toDays() - m_begin.toDays(), pay->getSum() );
+                } else {
+                    m_lines[ pay->getCurrency() ]->addExpence( pay->date().toDays() - m_begin.toDays(), -pay->getSum() );
+                }
+                break;
             }
-            break;
-        }
         }
         emit listChanged( pay->getCurrency() );
     }
@@ -110,33 +110,33 @@ void LineSeriesModel::payRemoved(const Pay* pay)
     {
         switch (m_lineType)
         {
-        case ( Modes::Years ):
-        {
-            if ( pay->getSum() > 0 ){
-                m_lines[ pay->getCurrency() ]->addIncome( pay->date().year() - m_begin.year(), -pay->getSum() );
-            } else {
-                m_lines[ pay->getCurrency() ]->addExpence( pay->date().year() - m_begin.year(), pay->getSum() );
+            case ( Modes::Years ):
+            {
+                if ( pay->getSum() > 0 ){
+                    m_lines[ pay->getCurrency() ]->addIncome( pay->date().year() - m_begin.year(), -pay->getSum() );
+                } else {
+                    m_lines[ pay->getCurrency() ]->addExpence( pay->date().year() - m_begin.year(), pay->getSum() );
+                }
+                break;
             }
-            break;
-        }
-        case ( Modes::Months ):
-        {
-            if ( pay->getSum() > 0 ){
-                m_lines[ pay->getCurrency() ]->addIncome( pay->date().toMonths() - m_begin.toMonths(), -pay->getSum() );
-            } else {
-                m_lines[ pay->getCurrency() ]->addExpence( pay->date().toMonths() - m_begin.toMonths(), pay->getSum() );
+            case ( Modes::Months ):
+            {
+                if ( pay->getSum() > 0 ){
+                    m_lines[ pay->getCurrency() ]->addIncome( pay->date().toMonths() - m_begin.toMonths(), -pay->getSum() );
+                } else {
+                    m_lines[ pay->getCurrency() ]->addExpence( pay->date().toMonths() - m_begin.toMonths(), pay->getSum() );
+                }
+                break;
             }
-            break;
-        }
-        case ( Modes::Days ):
-        {
-            if ( pay->getSum() > 0 ){
-                m_lines[ pay->getCurrency() ]->addIncome( pay->date().toDays() - m_begin.toDays(), -pay->getSum() );
-            } else {
-                m_lines[ pay->getCurrency() ]->addExpence( pay->date().toDays() - m_begin.toDays(), pay->getSum() );
+            case ( Modes::Days ):
+            {
+                if ( pay->getSum() > 0 ){
+                    m_lines[ pay->getCurrency() ]->addIncome( pay->date().toDays() - m_begin.toDays(), -pay->getSum() );
+                } else {
+                    m_lines[ pay->getCurrency() ]->addExpence( pay->date().toDays() - m_begin.toDays(), pay->getSum() );
+                }
+                break;
             }
-            break;
-        }
         }
         emit listChanged( pay->getCurrency() );
     }
@@ -145,6 +145,40 @@ void LineSeriesModel::payRemoved(const Pay* pay)
 void LineSeriesModel::currencyAdded(quint8 currencyNo)
 {
     m_lines.emplace( m_lines.begin() + currencyNo, new Line );
+
+    switch (m_lineType)
+    {
+        case ( Modes::Years ):
+        {
+            for ( int j = m_end.year() - m_begin.year(); j >=0; j--  )
+            {
+                m_lines[currencyNo]->add( 0, 0, QString::number( m_end.year() - j ) );
+            }
+        } break;
+        case ( Modes::Months ):
+        {
+            auto beginMonths = m_begin.toMonths();
+            Date temp{m_begin};
+            for ( int j = m_end.toMonths() - beginMonths; j >=0; j--  )
+            {
+                m_lines[currencyNo]->add( 0, 0, (*p_lang)[11 + temp.month() ].mid(0,3)
+                        + QString(' ') + QString::number( temp.year() ) );
+                temp.addMonths(1);
+            }
+        } break;
+        case ( Modes::Days ):
+        {
+            auto beginDays = m_begin.toDays();
+            Date temp{m_begin};
+            for ( int j = m_end.toDays() - beginDays; j >=0; j--  )
+            {
+                m_lines[currencyNo]->add( 0, 0, QString::number( temp.day() ) + QString(' ')
+                                          + (*p_lang)[11 + temp.month() ].mid(0,3) );
+                temp.addDays(1);
+            }
+        }
+    }
+    emit listChanged(currencyNo);
 }
 
 void LineSeriesModel::currencyRemoved(quint8 currencyNo)
@@ -165,85 +199,85 @@ void LineSeriesModel::fillLines()
     this->clearLines();
     switch (m_lineType)
     {
-    case ( Modes::Years ):
-    {
-        for ( quint16 i{0}; i < p_currencyModel->size(); i++ )
+        case ( Modes::Years ):
         {
-            for ( int j = m_end.year() - m_begin.year(); j >=0; j--  )
+            for ( quint16 i{0}; i < p_currencyModel->size(); i++ )
             {
-                m_lines[i]->add( 0, 0, QString::number( m_end.year() - j ) );
+                for ( int j = m_end.year() - m_begin.year(); j >=0; j--  )
+                {
+                    m_lines[i]->add( 0, 0, QString::number( m_end.year() - j ) );
+                }
             }
-        }
-        const Pay* pay;
-        for ( size_t i{0}; i < p_PayModel->size(); i++ )
-        {
-            pay = (*p_PayModel)[i];
-            if ( isDateFit(pay->date()) )
+            const Pay* pay;
+            for ( size_t i{0}; i < p_PayModel->size(); i++ )
             {
-                if ( pay->getSum() > 0 ){
-                    m_lines[ pay->getCurrency() ]->addIncome( pay->date().year() - m_begin.year(), pay->getSum() );
-                } else {
-                    m_lines[ pay->getCurrency() ]->addExpence( pay->date().year() - m_begin.year(), -pay->getSum() );
+                pay = (*p_PayModel)[i];
+                if ( isDateFit(pay->date()) )
+                {
+                    if ( pay->getSum() > 0 ){
+                        m_lines[ pay->getCurrency() ]->addIncome( pay->date().year() - m_begin.year(), pay->getSum() );
+                    } else {
+                        m_lines[ pay->getCurrency() ]->addExpence( pay->date().year() - m_begin.year(), -pay->getSum() );
+                    }
+                }
+            }
+            break;
+        }
+        case ( Modes::Months ):
+        {
+            auto beginMonths = m_begin.toMonths();
+            for ( quint16 i{0}; i < p_currencyModel->size(); i++ )
+            {
+                Date temp{m_begin};
+                for ( int j = m_end.toMonths() - beginMonths; j >=0; j--  )
+                {
+                    m_lines[i]->add( 0, 0, (*p_lang)[11 + temp.month() ].mid(0,3)
+                            + QString(' ') + QString::number( temp.year() ) );
+                    temp.addMonths(1);
+                }
+            }
+            const Pay* pay;
+            for ( size_t i{0}; i < p_PayModel->size(); i++ )
+            {
+                pay = (*p_PayModel)[i];
+                if ( isDateFit(pay->date()) )
+                {
+                    if ( pay->getSum() > 0 ){
+                        m_lines[ pay->getCurrency() ]->addIncome( pay->date().toMonths() - beginMonths, pay->getSum() );
+                    } else {
+                        m_lines[ pay->getCurrency() ]->addExpence( pay->date().toMonths() - beginMonths, -pay->getSum() );
+                    }
+                }
+            }
+            break;
+        }
+        case ( Modes::Days ):
+        {
+            auto beginDays = m_begin.toDays();
+            for ( quint16 i{0}; i < p_currencyModel->size(); i++ )
+            {
+                Date temp{m_begin};
+                for ( int j = m_end.toDays() - beginDays; j >=0; j--  )
+                {
+                    m_lines[i]->add( 0, 0, QString::number( temp.day() ) + QString(' ')
+                                     + (*p_lang)[11 + temp.month() ].mid(0,3) );
+                    temp.addDays(1);
+                }
+            }
+            const Pay* pay;
+            for ( size_t i{0}; i < p_PayModel->size(); i++ )
+            {
+                pay = (*p_PayModel)[i];
+                if ( isDateFit(pay->date()) )
+                {
+                    if ( pay->getSum() > 0 ){
+                        m_lines[ pay->getCurrency() ]->addIncome( pay->date().toDays() - beginDays, pay->getSum() );
+                    } else {
+                        m_lines[ pay->getCurrency() ]->addExpence( pay->date().toDays() - beginDays, -pay->getSum() );
+                    }
                 }
             }
         }
-        break;
-    }
-    case ( Modes::Months ):
-    {
-        auto beginMonths = m_begin.toMonths();
-        for ( quint16 i{0}; i < p_currencyModel->size(); i++ )
-        {
-            Date temp{m_begin};
-            for ( int j = m_end.toMonths() - beginMonths; j >=0; j--  )
-            {
-                m_lines[i]->add( 0, 0, (*p_lang)[11 + temp.month() ].mid(0,3)
-                        + QString(' ') + QString::number( temp.year() ) );
-                temp.addMonths(1);
-            }
-        }
-        const Pay* pay;
-        for ( size_t i{0}; i < p_PayModel->size(); i++ )
-        {
-            pay = (*p_PayModel)[i];
-            if ( isDateFit(pay->date()) )
-            {
-                if ( pay->getSum() > 0 ){
-                    m_lines[ pay->getCurrency() ]->addIncome( pay->date().toMonths() - beginMonths, pay->getSum() );
-                } else {
-                    m_lines[ pay->getCurrency() ]->addExpence( pay->date().toMonths() - beginMonths, -pay->getSum() );
-                }
-            }
-        }
-        break;
-    }
-    case ( Modes::Days ):
-    {
-        auto beginDays = m_begin.toDays();
-        for ( quint16 i{0}; i < p_currencyModel->size(); i++ )
-        {
-            Date temp{m_begin};
-            for ( int j = m_end.toDays() - beginDays; j >=0; j--  )
-            {
-                m_lines[i]->add( 0, 0, QString::number( temp.day() ) + QString(' ')
-                                 + (*p_lang)[11 + temp.month() ].mid(0,3) );
-                temp.addDays(1);
-            }
-        }
-        const Pay* pay;
-        for ( size_t i{0}; i < p_PayModel->size(); i++ )
-        {
-            pay = (*p_PayModel)[i];
-            if ( isDateFit(pay->date()) )
-            {
-                if ( pay->getSum() > 0 ){
-                    m_lines[ pay->getCurrency() ]->addIncome( pay->date().toDays() - beginDays, pay->getSum() );
-                } else {
-                    m_lines[ pay->getCurrency() ]->addExpence( pay->date().toDays() - beginDays, -pay->getSum() );
-                }
-            }
-        }
-    }
     }
     emit updated();
 }
@@ -251,8 +285,8 @@ void LineSeriesModel::fillLines()
 void LineSeriesModel::clear()
 {
     for ( auto line : m_lines ){
-            delete line;
-        }
+        delete line;
+    }
     m_lines.clear();
 }
 

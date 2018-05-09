@@ -173,6 +173,7 @@ Item {
    DateSelect {
       id: dateSelect
       onStateChanged: blockRectangle.state = state
+      isAllTimeAllowed: false
       onDateSelected: {
          switch( type ){
          case(0):

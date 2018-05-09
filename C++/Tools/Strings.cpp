@@ -27,7 +27,7 @@ bool Strings::readFile()
          return true;
       } else {
          file.open(QIODevice::WriteOnly);
-         data_.push_back("");
+         data_.push_back( "\u00A4" );
          return true;
       }
    } return false;

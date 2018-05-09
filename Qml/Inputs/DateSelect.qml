@@ -22,6 +22,7 @@ Rectangle {
    property bool isEndSelecting: false
 
    property int dateType: 0 // PERIOD = 0; DAY = 1; MONTH = 2; YEAR = 3; AllTime = 4
+   property bool isAllTimeAllowed: true;
 
    signal dateSelected(int type)
 
@@ -133,7 +134,7 @@ Rectangle {
    CustomButton2 {
       id: cancelButton
       anchors { bottom: parent.bottom; left: parent.left; }
-      width: parent.width / 3
+      width: isAllTimeAllowed ? parent.width / 3 : parent.width / 2
       height: uiSize
       Text {
          anchors { centerIn: parent }
@@ -147,7 +148,7 @@ Rectangle {
 
    Rectangle {
       anchors { bottom: parent.bottom; }
-      x: parent.width / 3
+      x: isAllTimeAllowed ? parent.width / 3 : parent.width / 2
       height: uiSize
       width: uiLineWidth
       color: "#CCCCCC"
@@ -155,6 +156,8 @@ Rectangle {
    CustomButton2 {
       id: allTimeButton
       anchors { bottom: parent.bottom; left: cancelButton.right; }
+      visible: isAllTimeAllowed
+      enabled: isAllTimeAllowed
       width: parent.width / 3
       height: uiSize
       Text {
@@ -170,6 +173,8 @@ Rectangle {
    Rectangle {
       anchors { bottom: parent.bottom; }
       x: parent.width / 3 * 2
+      visible: isAllTimeAllowed
+      enabled: isAllTimeAllowed
       height: uiSize
       width: uiLineWidth
       color: "#CCCCCC"
@@ -178,7 +183,7 @@ Rectangle {
    CustomButton2 {
       id: okButton
       anchors { bottom: parent.bottom; right: parent.right; }
-      width: parent.width / 3
+      width: isAllTimeAllowed ? parent.width / 3 : parent.width / 2
       height: uiSize
       Text {
          anchors { centerIn: parent }

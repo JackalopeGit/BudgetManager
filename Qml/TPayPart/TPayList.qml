@@ -313,7 +313,7 @@ Component {
                                  onClicked: tPayModel.eraseTPay( index )
                               }
                            }
-                           Image {
+/*                           Image {
                               id: editImage
                               anchors {
                                  right: parent.right;
@@ -323,7 +323,7 @@ Component {
                               width: uiSize / 3 * 2; height: width
                               sourceSize { width: uiSize / 3 * 2; height: uiSize / 3 * 2; } smooth: false
                               source: "/Icons/Pencil.svg"
-                           }/*
+                           }*//*
                            LinearGradient {
                               anchors {
                                  left: parent.left;

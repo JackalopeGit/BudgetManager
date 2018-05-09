@@ -1,7 +1,6 @@
 #include <QtWidgets/QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QQmlFileSelector>
 
 #include "Storage/paylist.h"
 #include "Storage/tpaylist.h"
@@ -20,9 +19,7 @@ int main(int argc, char *argv[])
    CategoryModel categoryModel{"category"};
    Strings       currencyModel{"currency"};
 
-
    Settings settings;
-
 
    Lang lang( LangMode(settings.getLang()) );
 
@@ -30,9 +27,6 @@ int main(int argc, char *argv[])
 
    if ( !categoryModel.rowCount() ){
        categoryModel.addCategory( lang.label(43), "#cccccc" );
-   }
-   if ( !currencyModel.rowCount() ){
-       currencyModel.set( 0, QString::fromUtf8("\u00A4") );
    }
 
    PayList  payModel{ &categoryModel, &currencyModel };
@@ -94,10 +88,9 @@ int main(int argc, char *argv[])
    ctxt->setContextProperty( "barModel", QVariant::fromValue( &barModel ) );
    ctxt->setContextProperty( "pieData",    QVariant::fromValue( &pieModel   ) );
 
-
    engine.load(QUrl(QStringLiteral("qrc:/Qml/main.qml")));
-   if (engine.rootObjects().isEmpty())
-      return -1;
-
+   if ( engine.rootObjects().isEmpty() ) {
+       return -1;
+   }
    return app.exec();
 }

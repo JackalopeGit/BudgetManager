@@ -139,7 +139,7 @@ Item {
       }
 
       CustomButton {
-         id: addPositiveButton
+         id: addButton
          z: 4
          anchors { right: parent.right }
          height: uiSize; width: height
@@ -155,7 +155,6 @@ Item {
             }
          }
          onClicked: {
-            payCreationWindow.isIncome = true
             payCreationWindow.state = "opened"
          }
       }
