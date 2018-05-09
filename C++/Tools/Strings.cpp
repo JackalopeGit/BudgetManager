@@ -24,10 +24,11 @@ bool Strings::readFile()
          while (!in.atEnd()) {
             data_.push_back( in.readLine() );
          }
+         file.close();
          return true;
       } else {
-         file.open(QIODevice::WriteOnly);
          data_.push_back( "\u00A4" );
+         this->saveFile();
          return true;
       }
    } return false;
