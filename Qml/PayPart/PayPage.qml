@@ -122,7 +122,7 @@ Item {
                   text = lang.label(101) + ", " + Qt.formatDateTime(currentDate, "yyyy")
                   payModel.selectYear( Qt.formatDateTime(currentDate,"yyyy")*1 )
                } else if ( settings.getDefDateType() === 3 ) {
-                  payModel.selectionDateReset()
+                  payModel.selectAllTime()
                   text = lang.label(102)
                }
             }

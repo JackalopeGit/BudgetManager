@@ -73,6 +73,7 @@ public:
     Q_INVOKABLE void selectYear          ( quint16 year );
     Q_INVOKABLE void selectMonth         ( quint16 year, quint8 month );
     Q_INVOKABLE void selectDay           ( quint16 year, quint8 month, quint8 day );
+    Q_INVOKABLE void selectAllTime();
     Q_INVOKABLE void selectionDateReset();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;

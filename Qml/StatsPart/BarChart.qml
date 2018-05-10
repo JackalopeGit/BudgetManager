@@ -131,10 +131,15 @@ Item {
                      return lang.label(101) + ", " + Qt.formatDateTime(currentDate, "yyyy")
 
                   case(3):
-                     /*pieData.setPieAllTime()
-
-                     return lang.label(102)*/
-                     return "unsupported"
+                     barModel.setSelection( barTypeSelect.currentIndex,
+                                           Qt.formatDateTime(currentDate,"yyyy")*1,
+                                           1,
+                                           1,
+                                           Qt.formatDateTime(currentDate,"yyyy")*1,
+                                           12,
+                                           dateInfo.daysInMonth(Qt.formatDateTime(currentDate,"yyyy")*1,
+                                                                Qt.formatDateTime(currentDate,"M")*1) );c
+                     return lang.label(101) + ", " + Qt.formatDateTime(currentDate, "yyyy")
                   }
                }
                font.pixelSize: uiFontSize

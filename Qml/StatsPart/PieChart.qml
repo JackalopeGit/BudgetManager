@@ -235,7 +235,7 @@ Item {
                return lang.label(101) + ", " + Qt.formatDateTime(currentDate, "yyyy")
 
             case(3):
-               pieData.setPieAllTime()
+               pieData.setAllTime()
 
                return lang.label(102)
             }

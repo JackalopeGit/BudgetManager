@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.7
 
 import "qrc:/Qml/Buttons"
 
@@ -127,14 +127,14 @@ Item {
                if ( pressed ){
                   var power = Math.pow( mouseX - centre, 2) + Math.pow( mouseY - centre, 2)
                   if ( power >= Math.pow( minutePath.radius - uiSize, 2 ) ) {
-                        if ( power <  Math.pow( minutePath.radius + uiSize, 2 ) ) {
-                           var degree = ((mouseX - centre == 0)
-                                         ? ( ( mouseY - centre > 0) ? 180 : 0 )
-                                         : ( mouseX - centre > 0 ) ?
-                                              (Math.atan( (mouseY - centre) / (mouseX - centre) ) * 180 / Math.PI) + 90
-                                            : (Math.atan( (mouseY - centre) / (mouseX - centre) ) * 180 / Math.PI) + 270) + 3
-                           minuteInput.text = parseInt( degree <= 360 ? degree / 6 : 0 );
-                        }
+                     if ( power <  Math.pow( minutePath.radius + uiSize, 2 ) ) {
+                        var degree = ((mouseX - centre == 0)
+                                      ? ( ( mouseY - centre > 0) ? 180 : 0 )
+                                      : ( mouseX - centre > 0 ) ?
+                                           (Math.atan( (mouseY - centre) / (mouseX - centre) ) * 180 / Math.PI) + 90
+                                         : (Math.atan( (mouseY - centre) / (mouseX - centre) ) * 180 / Math.PI) + 270) + 3
+                        minuteInput.text = parseInt( degree <= 360 ? degree / 6 : 0 );
+                     }
                   }
                }
             }
@@ -352,7 +352,9 @@ Item {
             bottom: 0;
             locale: "C";
          }
-         onTextChanged: if ( text.length < 2 ) text = '0' + text
+         onFocusChanged: if (focus) selectAll()
+         onTextChanged: if (innerCircle.state == "minute") innerCircle.state = "hour"
+         onEditingFinished: if ( text.length < 2 ) text = '0' + text
          Text {
             anchors { centerIn: parent }
             text: lang.label( 52 ) + lang.label( 52 )
@@ -375,7 +377,9 @@ Item {
             bottom: 0;
             locale: "C";
          }
-         onTextChanged: if ( text.length < 2 ) text = '0' + text
+         onFocusChanged: if (focus) selectAll()
+         onTextChanged: if ( innerCircle.state == "hour") innerCircle.state = "minute"
+         onEditingFinished: if ( text.length < 2 ) text = '0' + text
          Text {
             anchors { centerIn:  parent }
             text: lang.label( 53 ) + lang.label( 53 )

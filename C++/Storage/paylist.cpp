@@ -668,6 +668,16 @@ void PayList::selectDay(quint16 year, quint8 month, quint8 day)
     endResetModel();
 }
 
+void PayList::selectAllTime()
+{
+    beginResetModel();
+    m_isDateRangeSelected = m_isYearSelected = m_isMonthSelected = m_isDaySelected = false;
+    m_dateSelectionBegin.setYear( Date::YearMin   ).setMonth( Date::MonthMin  ).setDay( Date::DayMin    );
+    m_dateSelectionEnd.  setYear( Date::YearMax   ).setMonth( Date::MonthMax  ).setDay( Date::DayMaxDec );
+    this->refreshSelection();
+    endResetModel();
+}
+
 void PayList::selectionDateReset()
 {
     if ( m_isDateRangeSelected ||  m_isYearSelected || m_isMonthSelected || m_isDaySelected ){

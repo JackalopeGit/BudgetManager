@@ -130,6 +130,7 @@ bool CategoryModel::readFile()
                 m_category.emplace_back( QString::fromUtf8( nameBytes ), color );
                 file.read( P_C_STR( color ) );
             }
+            file.close();
             return true;
         }
     }
