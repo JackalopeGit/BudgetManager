@@ -138,7 +138,7 @@ Item {
                                            Qt.formatDateTime(currentDate,"yyyy")*1,
                                            12,
                                            dateInfo.daysInMonth(Qt.formatDateTime(currentDate,"yyyy")*1,
-                                                                Qt.formatDateTime(currentDate,"M")*1) );c
+                                                                Qt.formatDateTime(currentDate,"M")*1) )
                      return lang.label(101) + ", " + Qt.formatDateTime(currentDate, "yyyy")
                   }
                }
